@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Shop{% endblock %}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% include "inc/nav.html" %}
+    {% if messages %}
+        <ul class="messages">
+            {% for m in messages %}
+                <li class="{{ m.tags }}">{{ m }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
