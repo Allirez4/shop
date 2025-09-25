@@ -1,0 +1,934 @@
+[
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "accounts",
+      "model": "otp"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "accounts",
+      "model": "customuser"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "home",
+      "model": "category"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "home",
+      "model": "product"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "0o4a70jypqri58wrpydkchbbaewth3np",
+    "fields": {
+      "session_data": ".eJxVizkOAiEUQO9CbSZsw2Knib03IB_-J0xUJpGhMt5dTKbQ9i0vFqBvJfRGz7AgOzIh2OEXRkg3ql8DKa29bm3aUZsuD1ju17JWOo3-vJd_e4FWxmuAEnI5kybvJWpQCY3yoFXMenZOC5uVlTHbqJCyN4iW-8ydF0aMiL0_q6I3iQ:1uyohg:dA9knfeNDw5aTxOfaOfBuCyjZYLNGaho1uIUkK9yAXc",
+      "expire_date": "2025-10-01T09:43:56.599Z"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "figa3hdemhyisd1ke4hmrfaf3nmqm1g4",
+    "fields": {
+      "session_data": ".eJxVi0sKwjAQQO-StZTmU9Nxp-DeG4RJZoYUNYWmWYl3t0IXun2flwrY1hxa5SVMpE7Kq8Mvi5juXL4CU5pbWWu3o9pdnzg9bnkufN76y17-7Rlr3l5KbIEM6NE7LUl67RHYcxQbe_GowaA7ivBo4hAhOWdoGBxZIUZrQL0_mBA4FQ:1uyoUM:moUvTRVz7onH3G-yCKjXoj9fb4BG5EjLiK9vWL0QR1c",
+      "expire_date": "2025-10-01T09:30:10.527Z"
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 1,
+    "fields": {
+      "phone_number": "091234567",
+      "created_at": "2025-09-03T09:16:46.459Z",
+      "code": 60232
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 2,
+    "fields": {
+      "phone_number": "09122231231",
+      "created_at": "2025-09-03T09:18:04.726Z",
+      "code": 45847
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 3,
+    "fields": {
+      "phone_number": "09122231231",
+      "created_at": "2025-09-03T09:20:12.662Z",
+      "code": 88381
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 4,
+    "fields": {
+      "phone_number": "01923123131",
+      "created_at": "2025-09-03T09:20:22.968Z",
+      "code": 80297
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 5,
+    "fields": {
+      "phone_number": "01923123131",
+      "created_at": "2025-09-03T09:38:44.532Z",
+      "code": 70123
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 6,
+    "fields": {
+      "phone_number": "09122231231",
+      "created_at": "2025-09-03T09:39:08.539Z",
+      "code": 72514
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 7,
+    "fields": {
+      "phone_number": "09122231232",
+      "created_at": "2025-09-03T09:39:16.915Z",
+      "code": 12720
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 8,
+    "fields": {
+      "phone_number": "091234567",
+      "created_at": "2025-09-03T09:43:05.913Z",
+      "code": 38872
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 9,
+    "fields": {
+      "phone_number": "12313211231",
+      "created_at": "2025-09-03T09:43:19.091Z",
+      "code": 63193
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 10,
+    "fields": {
+      "phone_number": "12313214424",
+      "created_at": "2025-09-03T10:32:23.915Z",
+      "code": 27997
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 11,
+    "fields": {
+      "phone_number": "65198415649",
+      "created_at": "2025-09-04T08:16:31.559Z",
+      "code": 24312
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 12,
+    "fields": {
+      "phone_number": "88888888888",
+      "created_at": "2025-09-04T08:52:34.029Z",
+      "code": 47904
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 13,
+    "fields": {
+      "phone_number": "88888888288",
+      "created_at": "2025-09-04T09:13:03.850Z",
+      "code": 10728
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 14,
+    "fields": {
+      "phone_number": "12314451231",
+      "created_at": "2025-09-04T09:25:45.522Z",
+      "code": 41114
+    }
+  },
+  {
+    "model": "accounts.otp",
+    "pk": 15,
+    "fields": {
+      "phone_number": "66666666666",
+      "created_at": "2025-09-04T09:32:04.686Z",
+      "code": 95254
+    }
+  },
+  {
+    "model": "home.category",
+    "pk": 1,
+    "fields": {
+      "name": "lptp",
+      "slug": "lptp",
+      "created_at": "2025-09-08T13:05:52.129Z"
+    }
+  },
+  {
+    "model": "home.product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name": "asus",
+      "slug": "asus",
+      "image": "product/2025/09/08/Screenshot_1.png",
+      "descroption": "uyviuvhviygvytv",
+      "price": 99,
+      "availability": true,
+      "count": 1,
+      "created_at": "2025-09-08T13:06:45.912Z",
+      "updated_at": "2025-09-08T13:06:45.912Z"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": [
+        "admin",
+        "logentry"
+      ],
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": [
+        "admin",
+        "logentry"
+      ],
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": [
+        "admin",
+        "logentry"
+      ],
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": [
+        "admin",
+        "logentry"
+      ],
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add permission",
+      "content_type": [
+        "auth",
+        "permission"
+      ],
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change permission",
+      "content_type": [
+        "auth",
+        "permission"
+      ],
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": [
+        "auth",
+        "permission"
+      ],
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view permission",
+      "content_type": [
+        "auth",
+        "permission"
+      ],
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add group",
+      "content_type": [
+        "auth",
+        "group"
+      ],
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change group",
+      "content_type": [
+        "auth",
+        "group"
+      ],
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete group",
+      "content_type": [
+        "auth",
+        "group"
+      ],
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view group",
+      "content_type": [
+        "auth",
+        "group"
+      ],
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add content type",
+      "content_type": [
+        "contenttypes",
+        "contenttype"
+      ],
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change content type",
+      "content_type": [
+        "contenttypes",
+        "contenttype"
+      ],
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": [
+        "contenttypes",
+        "contenttype"
+      ],
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view content type",
+      "content_type": [
+        "contenttypes",
+        "contenttype"
+      ],
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add session",
+      "content_type": [
+        "sessions",
+        "session"
+      ],
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change session",
+      "content_type": [
+        "sessions",
+        "session"
+      ],
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete session",
+      "content_type": [
+        "sessions",
+        "session"
+      ],
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view session",
+      "content_type": [
+        "sessions",
+        "session"
+      ],
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add otp",
+      "content_type": [
+        "accounts",
+        "otp"
+      ],
+      "codename": "add_otp"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change otp",
+      "content_type": [
+        "accounts",
+        "otp"
+      ],
+      "codename": "change_otp"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete otp",
+      "content_type": [
+        "accounts",
+        "otp"
+      ],
+      "codename": "delete_otp"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view otp",
+      "content_type": [
+        "accounts",
+        "otp"
+      ],
+      "codename": "view_otp"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add user",
+      "content_type": [
+        "accounts",
+        "customuser"
+      ],
+      "codename": "add_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change user",
+      "content_type": [
+        "accounts",
+        "customuser"
+      ],
+      "codename": "change_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete user",
+      "content_type": [
+        "accounts",
+        "customuser"
+      ],
+      "codename": "delete_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view user",
+      "content_type": [
+        "accounts",
+        "customuser"
+      ],
+      "codename": "view_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add Category",
+      "content_type": [
+        "home",
+        "category"
+      ],
+      "codename": "add_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change Category",
+      "content_type": [
+        "home",
+        "category"
+      ],
+      "codename": "change_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete Category",
+      "content_type": [
+        "home",
+        "category"
+      ],
+      "codename": "delete_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view Category",
+      "content_type": [
+        "home",
+        "category"
+      ],
+      "codename": "view_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can add product",
+      "content_type": [
+        "home",
+        "product"
+      ],
+      "codename": "add_product"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can change product",
+      "content_type": [
+        "home",
+        "product"
+      ],
+      "codename": "change_product"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can delete product",
+      "content_type": [
+        "home",
+        "product"
+      ],
+      "codename": "delete_product"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "fields": {
+      "name": "Can view product",
+      "content_type": [
+        "home",
+        "product"
+      ],
+      "codename": "view_product"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$oBZIY0fZ8HUOdCQHBlcO3C$GaODoOTFf1oEHeHOIzH7rTEDEBaBYY4w9hsiwRLZTGU=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-04T09:01:20.912Z",
+      "email": "taraabhni89999@gmail.com",
+      "phone_number": "88888888888",
+      "full_name": "",
+      "is_active": true,
+      "is_admin": false,
+      "username": "gggg",
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$grydn8bHUvZYOrSa5WVDX8$10UiEKVWP3Uh/n0Rf9Kp8igt3uP+9oFerCVxq9AnJNg=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-04T09:26:01.663Z",
+      "email": "alirawdwadawdaeza5dawdadwd2181@outlsdawdaook.com",
+      "phone_number": "",
+      "full_name": "dddddd",
+      "is_active": true,
+      "is_admin": false,
+      "username": "12314451231",
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$MKTKvPqArJ4sxOqOxuq8Bn$9jwG+eOJaPNDE5qfSPq/8SMC7RfOr3khxZa6qpVsU2I=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-04T09:32:18.534Z",
+      "email": "2@gmail.com",
+      "phone_number": "66666666666",
+      "full_name": "mmddddd",
+      "is_active": true,
+      "is_admin": false,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$dsHaacFkJuM1SK4PDHwFoN$cCVlUI+1kCwwUc+va8zk0y/LrCaXwCQ4tcJUm2onSMA=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-04T09:37:35.224Z",
+      "email": "ali@ali.commm",
+      "phone_number": "66655555555",
+      "full_name": "lookok",
+      "is_active": true,
+      "is_admin": false,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$gX6JhXqRzd3W3VbwVkhQf2$E6SkGYAzOkUfDXuLj4dQd6RzYpyUrMULDNF1n1HoOjo=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-08T09:49:04.358Z",
+      "email": "aw@asw.com",
+      "phone_number": "0204732976",
+      "full_name": "adwa",
+      "is_active": true,
+      "is_admin": false,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$dDrYiVRZppxkDVTmjGYscJ$S6GSnDlQJVIlKKtnuhhIEgSMx0t2Ptdqy+tN4j8nrIU=",
+      "last_login": "2025-09-17T09:30:10.523Z",
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-08T09:56:24.261Z",
+      "email": "a@a.com",
+      "phone_number": "09204732976",
+      "full_name": "adw",
+      "is_active": true,
+      "is_admin": true,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$20rh5fHDLXt1xnXc2eFVZv$DrJ2egK0xPMm1jkt1HTLWyFULmzxrPY0hVWs7UzceNQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-08T09:57:44.579Z",
+      "email": "alireza52181@gmail.com",
+      "phone_number": "09113671549",
+      "full_name": "alireza",
+      "is_active": true,
+      "is_admin": false,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$RQBWuxZNHDPChc3T161Po6$PgkmzOwckOQu+xdJx+tMg5VYtTJIc/+Nbc5DGoR0NXg=",
+      "last_login": "2025-09-15T15:43:08.409Z",
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-15T15:42:52.420Z",
+      "email": "a@swad.com",
+      "phone_number": "0912345678",
+      "full_name": "alish",
+      "is_active": true,
+      "is_admin": true,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$VQrF09jcIZsgAppvFyBc5b$65Bz0IEsWj6Vv7XXU/ie3IGLPEquSnZkBKgrvRZLe1g=",
+      "last_login": "2025-09-17T09:43:56.589Z",
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "date_joined": "2025-09-17T09:43:30.743Z",
+      "email": "alireza52182@gmail.com",
+      "phone_number": "09113671550",
+      "full_name": "alireza",
+      "is_active": true,
+      "is_admin": false,
+      "username": null,
+      "city": null,
+      "address": null,
+      "postal_code": null,
+      "national_code": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+      "action_time": "2025-09-08T13:05:52.130Z",
+      "user": [
+        "09204732976"
+      ],
+      "content_type": [
+        "home",
+        "category"
+      ],
+      "object_id": "1",
+      "object_repr": "lptp",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+      "action_time": "2025-09-08T13:06:45.913Z",
+      "user": [
+        "09204732976"
+      ],
+      "content_type": [
+        "home",
+        "product"
+      ],
+      "object_id": "1",
+      "object_repr": "asus",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+      "action_time": "2025-09-17T09:33:05.956Z",
+      "user": [
+        "09204732976"
+      ],
+      "content_type": [
+        "accounts",
+        "otp"
+      ],
+      "object_id": "28",
+      "object_repr": "09113671550 - 78464 created at 2025-09-17 09:30:36.933352+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+      "action_time": "2025-09-17T09:34:22.446Z",
+      "user": [
+        "09204732976"
+      ],
+      "content_type": [
+        "accounts",
+        "otp"
+      ],
+      "object_id": "29",
+      "object_repr": "09113671550 - 52311 created at 2025-09-17 09:33:41.612352+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+      "action_time": "2025-09-17T09:42:48.915Z",
+      "user": [
+        "09204732976"
+      ],
+      "content_type": [
+        "accounts",
+        "customuser"
+      ],
+      "object_id": "10",
+      "object_repr": "alireza52182@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  }
+]

@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 class UserManager(BaseUserManager):
     
     def Create_User(self,phone_number,email,full_name,password):
-        if not phone_number:
+        if not phone_number :
             raise ValueError('user must have phone number')
         if not email:
             raise ValueError('user must have a email')

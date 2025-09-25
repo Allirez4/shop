@@ -1,10 +1,73 @@
-<nav>
-    <a href="/">Home</a>
-    <a href="{% url 'accounts:register' %}">Register</a>
-    {% if user.is_authenticated %}
-        <span>{{ user.full_name|default:user.email }}</span>
-        <a href="#">Logout</a>
-    {% else %}
-        <a href="{#}">Login</a>
-    {% endif %}
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+    <div style="display: flex; align-items: center; gap: 2rem;">
+        <a href="/" style="text-decoration: none; font-weight: bold; color: #007bff;">Home</a>
+        
+        <!-- Category Menu -->
+        <div style="display: flex; gap: 1.5rem;">
+            <div class="dropdown" style="position: relative;">
+                <a href="#" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Digital Products</a>
+                <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Laptops</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Phones</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Tablets</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Cameras</a>
+                </div>
+            </div>
+            
+            <div class="dropdown" style="position: relative;">
+                <a href="#" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Kitchen</a>
+                <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Appliances</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Cookware</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Utensils</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Storage</a>
+                </div>
+            </div>
+            
+            <div class="dropdown" style="position: relative;">
+                <a href="#" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Fashion</a>
+                <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Clothing</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Shoes</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Accessories</a>
+                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Jewelry</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:register' %}" style="text-decoration: none; color: #007bff; padding: 0.5rem 1rem; border: 1px solid #007bff; border-radius: 4px; transition: all 0.3s;">Register</a>
+            <a href="{% url 'accounts:login' %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Login</a>
+        {% else %}
+            {% if not user.is_admin %}
+                <a href="{% url 'home:profile' %}" style="text-decoration: none; color: #28a745; padding: 0.5rem 1rem; border: 1px solid #28a745; border-radius: 4px; transition: all 0.3s; margin-right: 0.5rem;">
+                    <i style="margin-right: 0.3rem;">👤</i>Profile
+                </a>
+            {% endif %}
+            <span style="color: #333; margin-right: 1rem;">Welcome, {{ user.full_name|default:user.email }}!</span>
+            <a href="{% url 'accounts:logout' %}" style="text-decoration: none; color: #dc3545; padding: 0.5rem 1rem; border: 1px solid #dc3545; border-radius: 4px; transition: all 0.3s;">Logout</a>
+        {% endif %}
+    </div>
 </nav>
+
+<script>
+// Simple dropdown functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+        const link = dropdown.querySelector('a');
+        const menu = dropdown.querySelector('div[style*="display: none"]');
+        
+        dropdown.addEventListener('mouseenter', () => {
+            menu.style.display = 'block';
+        });
+        
+        dropdown.addEventListener('mouseleave', () => {
+            menu.style.display = 'none';
+        });
+    });
+});
+</script>

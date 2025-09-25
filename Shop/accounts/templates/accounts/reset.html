@@ -1,22 +1,22 @@
 {% extends "base.html" %}
-{% block title %}Register - Shop{% endblock %}
+{% block title %}Reset Password - Shop{% endblock %}
 
 {% block content %}
 <div class="auth-hero">
     <div class="container">
-        <h1>Join Our Community</h1>
-        <p>Create your account and start your shopping journey</p>
+        <h1>Reset Password</h1>
+        <p>Enter your email or phone number to reset your password</p>
     </div>
 </div>
 
 <section class="auth-content">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="col-lg-5 col-md-7 col-sm-9">
                 <div class="auth-card">
                     <div class="card-header">
-                        <h2>Create Account</h2>
-                        <p>Fill in your details to get started</p>
+                        <h2>Password Reset</h2>
+                        <p>We'll send a reset link to your email address</p>
                     </div>
                     <div class="card-body">
                         {% if messages %}
@@ -27,24 +27,12 @@
                             {% endfor %}
                         {% endif %}
                         
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {{ form.non_field_errors }}
-                            </div>
-                        {% endif %}
-                        
                         <form method="post" novalidate>
                             {% csrf_token %}
                             {% for field in form %}
                                 <div class="form-group">
-                                    <label for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                        {% if field.field.required %}<span class="required">*</span>{% endif %}
-                                    </label>
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     {{ field }}
-                                    {% if field.help_text %}
-                                        <small class="help-text">{{ field.help_text|safe }}</small>
-                                    {% endif %}
                                     {% if field.errors %}
                                         {% for error in field.errors %}
                                             <div class="field-error">{{ error }}</div>
@@ -54,12 +42,20 @@
                             {% endfor %}
                             
                             <button type="submit" class="btn btn-primary btn-block">
-                                Create Account
+                                Send Reset Link
                             </button>
                         </form>
                         
+                        <div class="info-box">
+                            <p class="text-muted small">
+                                <i class="info-icon">💡</i>
+                                You can enter either your email address or phone number. 
+                                The reset link will always be sent to your email address.
+                            </p>
+                        </div>
+                        
                         <div class="auth-links">
-                            <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in here</a></p>
+                            <p>Remember your password? <a href="{% url 'accounts:login' %}">Sign in here</a></p>
                         </div>
                     </div>
                 </div>
@@ -141,12 +137,7 @@
         font-size: 0.9rem;
     }
     
-    .required {
-        color: #dc3545;
-        margin-left: 2px;
-    }
-    
-    .form-group input, .form-group select, .form-group textarea {
+    .form-group input {
         width: 100%;
         padding: 0.75rem 1rem;
         border: 2px solid #e9ecef;
@@ -154,28 +145,19 @@
         font-size: 1rem;
         transition: all 0.3s ease;
         background-color: #f8f9fa;
-        font-family: inherit;
     }
     
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    .form-group input:focus {
         outline: none;
         border-color: #667eea;
         background-color: white;
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
     
-    .help-text {
-        color: #6c757d;
-        font-size: 0.8rem;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
     .field-error {
         color: #dc3545;
         font-size: 0.85rem;
         margin-top: 0.25rem;
-        display: block;
     }
     
     .btn-primary {
@@ -241,35 +223,24 @@
         color: #721c24;
     }
     
-    /* Two-column layout for larger forms */
-    @media (min-width: 768px) {
-        .form-row {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-        }
+    .info-box {
+        background-color: #e7f3ff;
+        border: 1px solid #b3d9ff;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1.5rem 0;
+        text-align: center;
     }
     
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-        .auth-hero {
-            padding: 2rem 1rem 1.5rem;
-        }
-        
-        .card-header {
-            padding: 1.5rem 1.5rem 1rem;
-        }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-        
-        .form-group input, .form-group select, .form-group textarea {
-            padding: 0.6rem 0.8rem;
-        }
+    .info-box p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #0066cc;
+        line-height: 1.4;
+    }
+    
+    .info-icon {
+        margin-right: 0.5rem;
     }
 </style>
 {% endblock %}

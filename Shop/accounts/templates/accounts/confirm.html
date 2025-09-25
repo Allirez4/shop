@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% block title %}Set New Password - Shop{% endblock %}
+
+{% block content %}
+<div class="auth-hero">
+    <div class="container">
+        <h1>Create New Password</h1>
+        <p>Enter your new secure password</p>
+    </div>
+</div>
+
+<section class="auth-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="auth-card">
+                    <div class="card-header">
+                        <div class="lock-icon">
+                            <i class="security-icon">🔒</i>
+                        </div>
+                        <h2>Reset Your Password</h2>
+                        <p>Choose a strong password for your account</p>
+                    </div>
+                    <div class="card-body">
+                        {% if form.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <h5>Please fix the following errors:</h5>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label for="{{ form.new_password1.id_for_label }}" class="form-label">
+                                    New Password
+                                </label>
+                                <div class="password-input-wrapper">
+                                    {{ form.new_password1 }}
+                                    <button type="button" class="password-toggle" onclick="togglePassword('{{ form.new_password1.id_for_label }}')">
+                                        <span class="toggle-text">Show</span>
+                                    </button>
+                                </div>
+                                {% if form.new_password1.help_text %}
+                                    <div class="form-help">{{ form.new_password1.help_text }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ form.new_password2.id_for_label }}" class="form-label">
+                                    Confirm New Password
+                                </label>
+                                <div class="password-input-wrapper">
+                                    {{ form.new_password2 }}
+                                    <button type="button" class="password-toggle" onclick="togglePassword('{{ form.new_password2.id_for_label }}')">
+                                        <span class="toggle-text">Show</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="password-requirements">
+                                <h6>Password Requirements:</h6>
+                                <ul>
+                                    <li>At least 8 characters long</li>
+                                    <li>Cannot be too common</li>
+                                    <li>Cannot be entirely numeric</li>
+                                    <li>Must be different from your personal information</li>
+                                </ul>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                Update Password
+                            </button>
+                        </form>
+                        
+                        <div class="form-footer">
+                            <a href="{% url 'accounts:login' %}" class="back-link">
+                                ← Back to Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .auth-hero {
+        text-align: center;
+        padding: 3rem 1rem 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin-bottom: 3rem;
+    }
+    
+    .auth-hero h1 {
+        font-size: clamp(2rem, 5vw, 2.5rem);
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    
+    .auth-hero p {
+        font-size: clamp(1rem, 3vw, 1.1rem);
+        margin-bottom: 0;
+        opacity: 0.9;
+    }
+    
+    .auth-content {
+        padding: 2rem 1rem 4rem;
+        min-height: 60vh;
+    }
+    
+    .auth-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(102, 126, 234, 0.12);
+        overflow: hidden;
+        border: none;
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-bottom: 1px solid #dee2e6;
+        padding: 2rem 2rem 1.5rem;
+        text-align: center;
+    }
+    
+    .lock-icon {
+        margin-bottom: 1rem;
+    }
+    
+    .security-icon {
+        font-size: 3rem;
+        display: block;
+    }
+    
+    .card-header h2 {
+        margin: 0 0 0.5rem 0;
+        color: #667eea;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    
+    .card-header p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .password-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-control {
+        flex: 1;
+        padding: 0.75rem 3rem 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+    
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        background: none;
+        border: none;
+        color: #667eea;
+        cursor: pointer;
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .password-toggle:hover {
+        background-color: rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-help {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+    
+    .password-requirements {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .password-requirements h6 {
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .password-requirements ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+    
+    .password-requirements li {
+        margin-bottom: 0.5rem;
+        color: #555;
+        font-size: 0.9rem;
+    }
+    
+    .btn-submit {
+        width: 100%;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .form-footer {
+        text-align: center;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .back-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+        color: #5a6fd8;
+        text-decoration: underline;
+    }
+    
+    .alert-danger {
+        border-radius: 8px;
+        border: none;
+        background-color: #f8d7da;
+        color: #721c24;
+        margin-bottom: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .auth-hero {
+            padding: 2rem 1rem 1.5rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const button = field.nextElementSibling;
+    const toggleText = button.querySelector('.toggle-text');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        toggleText.textContent = 'Hide';
+    } else {
+        field.type = 'password';
+        toggleText.textContent = 'Show';
+    }
+}
+</script>
+{% endblock %}

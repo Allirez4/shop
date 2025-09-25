@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block title %}Password Changed - Shop{% endblock %}
+
+{% block content %}
+<div class="auth-hero">
+    <div class="container">
+        <h1>Password Updated!</h1>
+        <p>Your password has been successfully changed</p>
+    </div>
+</div>
+
+<section class="auth-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="auth-card">
+                    <div class="card-header">
+                        <div class="success-icon">
+                            <i class="check-icon">✅</i>
+                        </div>
+                        <h2>All Set!</h2>
+                        <p>Your account is now secure with your new password</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="success-message">
+                            <h4>Password Successfully Updated</h4>
+                            <p>Your password has been changed and your account is secure. You can now log in with your new password.</p>
+                        </div>
+                        
+                        <div class="security-tips">
+                            <h5>Security Tips</h5>
+                            <ul>
+                                <li>Don't share your password with anyone</li>
+                                <li>Use a unique password for each account</li>
+                                <li>Consider using a password manager</li>
+                                <li>Log out from shared computers</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <a href="{% url 'accounts:login' %}" class="btn btn-primary">
+                                Log In Now
+                            </a>
+                            <a href="{% url 'home:home' %}" class="btn btn-outline-secondary">
+                                Go to Homepage
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .auth-hero {
+        text-align: center;
+        padding: 3rem 1rem 2rem;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        margin-bottom: 3rem;
+    }
+    
+    .auth-hero h1 {
+        font-size: clamp(2rem, 5vw, 2.5rem);
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    
+    .auth-hero p {
+        font-size: clamp(1rem, 3vw, 1.1rem);
+        margin-bottom: 0;
+        opacity: 0.9;
+    }
+    
+    .auth-content {
+        padding: 2rem 1rem 4rem;
+        min-height: 60vh;
+    }
+    
+    .auth-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(40, 167, 69, 0.12);
+        overflow: hidden;
+        border: none;
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-bottom: 1px solid #dee2e6;
+        padding: 2rem 2rem 1.5rem;
+        text-align: center;
+    }
+    
+    .success-icon {
+        margin-bottom: 1rem;
+    }
+    
+    .check-icon {
+        font-size: 3rem;
+        display: block;
+    }
+    
+    .card-header h2 {
+        margin: 0 0 0.5rem 0;
+        color: #28a745;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    
+    .card-header p {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .success-message {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #28a745;
+    }
+    
+    .success-message h4 {
+        color: #155724;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .success-message p {
+        color: #155724;
+        margin: 0;
+        line-height: 1.6;
+    }
+    
+    .security-tips {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .security-tips h5 {
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .security-tips h5::before {
+        content: "🔐";
+        font-size: 1.2rem;
+    }
+    
+    .security-tips ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+    
+    .security-tips li {
+        margin-bottom: 0.5rem;
+        color: #555;
+        line-height: 1.5;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        border: 2px solid transparent;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border-color: transparent;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        color: white;
+    }
+    
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+        background: transparent;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+        
+        .auth-hero {
+            padding: 2rem 1rem 1.5rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

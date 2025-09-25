@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'Shop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'shop',
+        'USER': 'shop',          # or the owner role you use
+        'PASSWORD': '123',  # the one you just set
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -127,3 +132,24 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL='accounts.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    
+    'accounts.backends.EmailPhoneAuthBackend',  
+    'django.contrib.auth.backends.ModelBackend',
+]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'alireza52181@gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'djhwdxyhocoqbyjt'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'YALLAH'
+#celery settings
+CELERY_BROKER_URL = 'amqp://guest@localhost:5672//'   # RabbitMQ connection
+CELERY_RESULT_BACKEND = 'django-db'                   # Store results in DB
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Tehran'

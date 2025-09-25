@@ -1,4 +1,10 @@
 from django import forms
+from django.contrib.auth.views import PasswordResetView
+from django import forms
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.contrib.auth.tokens import default_token_generator
 from .models import CustomUser
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -35,3 +41,56 @@ class UserRegistrationForm(forms.Form):
     password=forms.CharField(max_length=50,widget=forms.PasswordInput)
 class VerifyOtp(forms.Form):
     code=forms.IntegerField(max_value=99999)
+
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        label='Email or Phone Number',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter email or phone'})
+    )
+    password = forms.CharField(widget=forms.PasswordInput())
+    
+User = get_user_model()
+class hybridresetform(PasswordResetForm):
+    email = forms.CharField(
+        label='Email or Phone Number',
+        max_length=254,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter email or phone'})
+    )
+
+    def get_users(self, email):
+        if '@' in email:
+            active_users = User.objects.filter(email__iexact=email, is_active=True)
+        else:
+            active_users = User.objects.filter(phone_number__iexact=email, is_active=True)
+        return (u for u in active_users if u.has_usable_password())
+
+    def save(
+        self,
+        domain_override=None,
+        subject_template_name="registration/password_reset_subject.txt",
+        email_template_name="registration/password_reset_email.html",
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name=None,
+        extra_email_context=None,
+    ):
+        # Do NOT send email here (view handles Celery dispatch).
+        email_or_phone = self.cleaned_data["email"]
+
+        if '@' in email_or_phone:
+            qs = User.objects.filter(email__iexact=email_or_phone, is_active=True)
+        else:
+            qs = User.objects.filter(phone_number__iexact=email_or_phone, is_active=True)
+
+        user = qs.first()
+        if not user or not user.email:
+            # Silent return (avoid user enumeration)
+            return None
+
+        # Normalize cleaned email for downstream view logic if ever used.
+        self.cleaned_data["email"] = user.email
+        return None
