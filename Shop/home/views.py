@@ -54,11 +54,11 @@ class profileView(View):
         
         return redirect('home:profile')
 def List_products(request,category_slug,subcategory_slug=None):
-    
-    if category_slug and subcategory_slug:
-        products=Product.objects.select_related('subcategory__category').prefetch_related('images')
-    elif not subcategory_slug:
-        products=Product.objects.select_related('category').prefetch_related('images')
+    products = Product.objects.select_related('subcategory__category').prefetch_related('images')
+    if subcategory_slug:
+       products=products.filter(subcategory__slug=subcategory_slug)
+    else: 
+        products=products.filter(subcategory__category__slug=category_slug)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         products_data=[]
         for product in products:

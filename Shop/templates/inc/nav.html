@@ -4,35 +4,16 @@
         
         <!-- Category Menu -->
         <div style="display: flex; gap: 1.5rem;">
+            {% for category in all_categories %}
             <div class="dropdown" style="position: relative;">
-                <a href="#" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Digital Products</a>
+                <a href="{% url 'home:name_of_your_product_list_view' category.slug %}" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">{{ category.name }}</a>
                 <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Laptops</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Phones</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Tablets</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Cameras</a>
+                    {% for subcategory in category.subcategory.all %}
+                    <a href="{% url 'home:list_products' category.slug subcategory.slug %}" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">{{ subcategory.name }}</a>
+                    {% endfor %}
                 </div>
             </div>
-            
-            <div class="dropdown" style="position: relative;">
-                <a href="#" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Kitchen</a>
-                <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Appliances</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Cookware</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Utensils</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Storage</a>
-                </div>
-            </div>
-            
-            <div class="dropdown" style="position: relative;">
-                <a href="#" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Fashion</a>
-                <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Clothing</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Shoes</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Accessories</a>
-                    <a href="#" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">Jewelry</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     
