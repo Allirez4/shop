@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-
+from smart_selects.db_fields import ChainedForeignKey
 class Category(models.Model):
     name=models.CharField(max_length=50,)
     slug=models.SlugField(max_length=200,unique=True,blank=True)
@@ -25,8 +25,7 @@ class SubCategory(models.Model):
     name=models.CharField(max_length=50)
     slug=models.SlugField(max_length=200,unique=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
-    list_display=['name','category','slug']
-    list_filter=['category']
+    
     class Meta:
         
         ordering=('name',)
@@ -50,7 +49,7 @@ class Product(models.Model):
     name=models.CharField(max_length=40)
     slug=models.SlugField(max_length=200,unique=True,null=False,blank=True)
     image=models.ImageField(upload_to='product/%Y/%m/%d')
-    descroption=models.TextField()
+    description=models.TextField()
     price=models.IntegerField()
     availability=models.BooleanField()
     count=models.SmallIntegerField()

@@ -5,6 +5,21 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.http import JsonResponse
+from .models import Category, SubCategory
+def get_subcategories(request):
+    """
+    This view is called by the JavaScript.
+    It takes a category_id from the request's GET parameters,
+    filters the SubCategory model, and returns the results as JSON.
+    """
+    category_id = request.GET.get('category_id')
+    if category_id:
+        subcategories = SubCategory.objects.filter(category_id=category_id).order_by('name')
+        # We create a dictionary of {id: name} for the subcategories
+        return JsonResponse({sc.id: sc.name for sc in subcategories})
+    # If no category_id is provided, return an empty dictionary
+    return JsonResponse({})
 class HomeView(View):
     def get(self,request):
         products=Product.objects.all()
@@ -38,3 +53,22 @@ class profileView(View):
             messages.error(request, f'Error updating profile: {str(e)}')
         
         return redirect('home:profile')
+def List_products(request,category_slug,subcategory_slug=None):
+    
+    if category_slug and subcategory_slug:
+        products=Product.objects.select_related('subcategory__category').prefetch_related('images')
+    elif not subcategory_slug:
+        products=Product.objects.select_related('category').prefetch_related('images')
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        products_data=[]
+        for product in products:
+            products_data.append({
+                'id':product.id,
+                'name':product.name,
+                'price':str(product.price),
+                'image_url':product.images.first().image.url if product.images.exists() else '',
+                'url':product.get_absolute_url(),
+                'slug':product.slug,
+            })
+        return JsonResponse({'products':products_data})
+    return render(request,'home/list_products.html',{'products':products})        

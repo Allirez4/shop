@@ -53,19 +53,17 @@ class LoginForm(forms.Form):
     
 User = get_user_model()
 class hybridresetform(PasswordResetForm):
-    email = forms.CharField(
+    email=forms.CharField(
         label='Email or Phone Number',
         max_length=254,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter email or phone'})
-    )
-
+        widget=forms.TextInput(attrs={'placeholder':'Enter email or phone'}))
     def get_users(self, email):
         if '@' in email:
             active_users = User.objects.filter(email__iexact=email, is_active=True)
         else:
             active_users = User.objects.filter(phone_number__iexact=email, is_active=True)
         return (u for u in active_users if u.has_usable_password())
-
+    
     def save(
         self,
         domain_override=None,
@@ -78,19 +76,25 @@ class hybridresetform(PasswordResetForm):
         html_email_template_name=None,
         extra_email_context=None,
     ):
-        # Do NOT send email here (view handles Celery dispatch).
+        
         email_or_phone = self.cleaned_data["email"]
-
         if '@' in email_or_phone:
-            qs = User.objects.filter(email__iexact=email_or_phone, is_active=True)
+            user=User.objects.filter(email__iexact=email_or_phone)
         else:
-            qs = User.objects.filter(phone_number__iexact=email_or_phone, is_active=True)
-
-        user = qs.first()
-        if not user or not user.email:
-            # Silent return (avoid user enumeration)
-            return None
-
-        # Normalize cleaned email for downstream view logic if ever used.
+            user=User.objects.filter(phone_number__iexact=email_or_phone)
+        if not user.exists():
+            raise ValidationError("This account doesn't have an email address for password reset.")
+        
+        # Use the user's email for sending, regardless of how they searched
         self.cleaned_data["email"] = user.email
-        return None
+        return super().save(
+            domain_override=domain_override,
+            subject_template_name=subject_template_name,
+            email_template_name=email_template_name,
+            use_https=use_https,
+            token_generator=token_generator,
+            from_email=from_email,
+            request=request,
+            html_email_template_name=html_email_template_name,
+            extra_email_context=extra_email_context
+        )
