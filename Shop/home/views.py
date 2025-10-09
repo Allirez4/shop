@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from .models import Category, SubCategory
+from django.core.paginator import Paginator
 def get_subcategories(request):
     """
     This view is called by the JavaScript.
@@ -54,21 +55,26 @@ class profileView(View):
         
         return redirect('home:profile')
 def List_products(request,category_slug,subcategory_slug=None):
-    products = Product.objects.select_related('subcategory__category').prefetch_related('images')
+    products = Product.objects.select_related('subcategory__category')
     if subcategory_slug:
        products=products.filter(subcategory__slug=subcategory_slug)
     else: 
         products=products.filter(subcategory__category__slug=category_slug)
+    paginator = Paginator(products, 12)
+    product_count = products.count()
+    page_number = request.GET.get('page', 1) # Get page number from URL, default to 1
+    page_obj = paginator.get_page(page_number)
+    a=True
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        products_data=[]
-        for product in products:
-            products_data.append({
-                'id':product.id,
-                'name':product.name,
-                'price':str(product.price),
-                'image_url':product.images.first().image.url if product.images.exists() else '',
-                'url':product.get_absolute_url(),
-                'slug':product.slug,
-            })
-        return JsonResponse({'products':products_data})
-    return render(request,'home/list_products.html',{'products':products})        
+        
+        
+        print(a)
+        print('='*99)
+        print(page_obj.has_next())
+        print(page_obj.object_list)
+        print(paginator.count)
+        print(paginator.num_pages)
+        
+        return render(request,'home/products_partial.html',{'products':page_obj.object_list,'has_nextpage':page_obj.has_next()})
+    print('aaavvvvvaaaa')    
+    return render(request,'home/list_products.html',{'page_obj':page_obj,'products': page_obj.object_list,'products_count':product_count})        

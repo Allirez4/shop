@@ -1,0 +1,13 @@
+{% for product in products %}
+    <div class="product">
+        <h3>{{ product.name }}</h3>
+        <p>Price: ${{ product.price }}</p>
+        <p>{{ product.description|truncatewords:20 }}</p>
+        <a href="{{ product.get_absolute_url }}">View Details</a>
+        
+
+
+    </div>
+{% empty %}
+    <p>No products found.</p>
+{% endfor %}

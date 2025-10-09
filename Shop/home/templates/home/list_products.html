@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Products - Shop{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Sidebar Filters (Optional) -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Filters</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Categories</h6>
+                    <div class="list-group mb-3">
+                        {% for category in all_categories %}
+                        <a href="{% url 'home:name_of_your_product_list_view' category.slug %}" 
+                           class="list-group-item list-group-item-action">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Products</h2>
+                <div class="text-muted">
+                    <span id="product-count">{{ products_count }}</span> products found
+                </div>
+            </div>
+
+            <!-- Products Container -->
+            <div id="products-container" class="row">
+                {% include 'home/products_partial.html' %}
+                
+                {% if not products %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <h4>No products found</h4>
+                        <p>There are no products available in this category.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading-spinner" class="text-center my-5" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading more products...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+
+.card-img-wrapper {
+    position: relative;
+    background-color: #f8f9fa;
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.hover-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.product-item {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentPage = 2; // Start from page 2 since page 1 is already loaded
+    let isLoading = false;
+    let hasMoreProducts = {{ page_obj.has_next|yesno:"true,false" }};
+    
+    const productsContainer = document.getElementById('products-container');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    {% comment %} const productCount = document.getElementById('product-count'); {% endcomment %}
+    
+    // Infinite scroll functionality
+    function checkScroll() {
+        if (isLoading) return;
+        
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Load more when user is 200px from bottom
+        if (scrollPosition >= documentHeight - 200) {
+            loadMoreProducts();
+        }
+    }
+    
+    // Load more products via AJAX
+    function loadMoreProducts() {
+        if (isLoading || !hasMoreProducts) return;
+        
+        isLoading = true;
+        loadingSpinner.style.display = 'block';
+        
+        // Get current URL path and add page parameter
+        const currentUrl = window.location.pathname + '?page=' + currentPage;
+        currentPage++;
+        // Make AJAX request for HTML partial
+        fetch(currentUrl, {
+    method: 'GET',
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    credentials: 'same-origin'  // Important for Django CSRF
+            })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(html => {
+            if (html && html.trim().length > 0) {
+                // Create a temporary container to parse the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // Check for pagination marker
+                const paginationMarker = tempDiv.querySelector('#pagination-marker');
+                if (paginationMarker) {
+                    hasMoreProducts = paginationMarker.dataset.hasNext === 'true';
+                    console.log('Server has_next:', hasMoreProducts);
+                }
+                
+                // Get all product items from the response
+                const newProducts = tempDiv.querySelectorAll('.product-item');
+                
+                if (newProducts.length > 0) {
+                    // Append each product to the container
+                    newProducts.forEach(product => {
+                        productsContainer.appendChild(product);
+                    });
+                    
+                    // Update product count
+                    const currentCount = parseInt(productCount.textContent);
+                    productCount.textContent = currentCount + newProducts.length;
+                } else {
+                    hasMoreProducts = false;
+                }
+            } else {
+                hasMoreProducts = false;
+                console.log('Empty response - stopping pagination');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading products:', error);
+        })
+        .finally(() => {
+            isLoading = false;
+            loadingSpinner.style.display = 'none';
+        });
+    }
+    
+    // Enable infinite scroll
+    window.addEventListener('scroll', checkScroll);
+    
+    // Initial check in case there's not enough content to fill the page
+    setTimeout(() => {
+        if (document.documentElement.scrollHeight <= window.innerHeight) {
+            loadMoreProducts();
+        }
+    }, 100);
+});
+</script>
+{% endblock %}

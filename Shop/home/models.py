@@ -6,6 +6,7 @@ class Category(models.Model):
     name=models.CharField(max_length=50,)
     slug=models.SlugField(max_length=200,unique=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
+    
     class Meta:
         ordering=('name',)
         verbose_name='Category'
@@ -25,6 +26,7 @@ class SubCategory(models.Model):
     name=models.CharField(max_length=50)
     slug=models.SlugField(max_length=200,unique=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
+    
     
     class Meta:
         
@@ -55,6 +57,7 @@ class Product(models.Model):
     count=models.SmallIntegerField()
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    is_fake = models.BooleanField(default=False)
     class Meta:
         ordering=('name',)
     def __str__(self):
