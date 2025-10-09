@@ -14,6 +14,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--count', type=int, default=50, help='The number of fake products to create.')
         parser.add_argument('--clear', action='store_true', help='Deletes all products with "FAKE" in the name.')
+        parser.add_argument('--bulk', action='store_true', help='Use bulk create (faster, no images).')
+        parser.add_argument('--threads', type=int, default=10, help='Number of threads for image downloads.')
 
     def handle(self, *args, **options):
         if not settings.DEBUG:
@@ -21,16 +23,15 @@ class Command(BaseCommand):
             return
 
         count = options['count']
+        use_bulk = options['bulk']
         fake = Faker()
 
         if options['clear']:
             self.stdout.write(self.style.WARNING('Clearing all FAKE products...'))
-            # Delete products with "FAKE" in the name instead of using is_fake field
             Product.objects.filter(name__icontains='FAKE').delete()
 
         self.stdout.write("Ensuring your categories and subcategories exist...")
         
-        # This is your exact data structure
         category_data = {
             'Digital Products': ['Laptops', 'Phones', 'Camera', 'Tablets'],
             'Kitchen': ['frying pan', 'knife', 'glass'],
@@ -38,7 +39,6 @@ class Command(BaseCommand):
             'Sports Gear': ['Sneakers', 'Jerseys', 'Equipment'],
         }
 
-        # Use get_or_create to safely add this data if it doesn't exist
         all_subcategories = []
         for cat_name, sub_names in category_data.items():
             category, _ = Category.objects.get_or_create(
@@ -47,9 +47,7 @@ class Command(BaseCommand):
             )
             
             for sub_name in sub_names:
-                # Generate a unique slug to avoid conflicts
                 unique_slug = slugify(f"{cat_name}-{sub_name}")
-                
                 subcategory, _ = SubCategory.objects.get_or_create(
                     category=category, 
                     name=sub_name,
@@ -60,46 +58,106 @@ class Command(BaseCommand):
         if not all_subcategories:
             self.stdout.write(self.style.ERROR('No subcategories found or created. Cannot create products.'))
             return
-            
-        self.stdout.write(f"Creating {count} fake products...")
 
-        for i in range(count):
-            self.stdout.write(f'  - Creating product {i + 1}/{count}...', ending='\r')
+        if use_bulk:
+            # BULK CREATE - VERY FAST (No images)
+            self.stdout.write(f"Creating {count} fake products using bulk create...")
+            products_to_create = []
             
-            # Pick a random existing subcategory
-            random_sub_cat = random.choice(all_subcategories)
-            parent_cat = random_sub_cat.category
-
-            # Generate a shorter product name that fits in 40 characters
-            base_name = fake.word().title()
-            fake_name = f"FAKE {base_name} {random.randint(1, 999)}"
-            
-            # Ensure name doesn't exceed 40 characters
-            if len(fake_name) > 40:
-                fake_name = fake_name[:37] + "..."
-
-            try:
-                product = Product.objects.create(
+            for i in range(count):
+                random_sub_cat = random.choice(all_subcategories)
+                parent_cat = random_sub_cat.category
+                base_name = fake.word().title()
+                fake_name = f"FAKE {base_name} {random.randint(1, 999)}"
+                
+                if len(fake_name) > 40:
+                    fake_name = fake_name[:37] + "..."
+                
+                # Generate unique slug
+                base_slug = slugify(fake_name)
+                slug = f"{base_slug}-{i}"
+                
+                products_to_create.append(Product(
                     category=parent_cat,
                     subcategory=random_sub_cat,
-                    name=fake_name,  # Shortened name
-                    description=fake.text(max_nb_chars=200),  # Limit description length too
+                    name=fake_name,
+                    slug=slug,
+                    description=fake.text(max_nb_chars=200),
                     price=random.randint(10, 3000),
                     availability=True,
                     count=random.randint(10, 200),
-                )
+                ))
                 
-                # Try to download and save an image
+                if (i + 1) % 50 == 0:
+                    self.stdout.write(f'  - Prepared {i + 1}/{count} products...', ending='\r')
+            
+            # Bulk insert all at once
+            Product.objects.bulk_create(products_to_create, batch_size=100)
+            self.stdout.write(self.style.SUCCESS(f'\n\nSuccessfully created {count} fake products (bulk mode).'))
+            
+        else:
+            # REGULAR CREATE WITH MULTITHREADING FOR IMAGES
+            from concurrent.futures import ThreadPoolExecutor, as_completed
+            
+            self.stdout.write(f"Creating {count} fake products with images (using {options['threads']} threads)...")
+            
+            def create_product_with_image(i):
+                random_sub_cat = random.choice(all_subcategories)
+                parent_cat = random_sub_cat.category
+                base_name = fake.word().title()
+                fake_name = f"FAKE {base_name} {random.randint(1, 999)}"
+                
+                if len(fake_name) > 40:
+                    fake_name = fake_name[:37] + "..."
+
                 try:
-                    response = requests.get('https://picsum.photos/800/600', stream=True, timeout=5)
-                    response.raise_for_status()
-                    image_file = ContentFile(response.content, name=f'{product.slug}.jpg')
-                    product.image.save(f'{product.slug}.jpg', image_file, save=True)
-                except requests.exceptions.RequestException as e:
-                    self.stdout.write(self.style.WARNING(f"\nCould not download image for product {product.name}: {e}"))
+                    product = Product.objects.create(
+                        category=parent_cat,
+                        subcategory=random_sub_cat,
+                        name=fake_name,
+                        description=fake.text(max_nb_chars=200),
+                        price=random.randint(10, 3000),
+                        availability=True,
+                        count=random.randint(10, 200),
+                    )
                     
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"\nError creating product: {e}"))
-                continue
-        
-        self.stdout.write(self.style.SUCCESS(f'\n\nSuccessfully created {count} fake products.'))
+                    # Download image with shorter timeout
+                    try:
+                        response = requests.get('https://picsum.photos/800/600', stream=True, timeout=3)
+                        response.raise_for_status()
+                        image_file = ContentFile(response.content, name=f'{product.slug}.jpg')
+                        product.image.save(f'{product.slug}.jpg', image_file, save=True)
+                        return (True, None)
+                    except requests.exceptions.RequestException as e:
+                        return (True, f"No image for {product.name}")
+                        
+                except Exception as e:
+                    return (False, str(e))
+            
+            # Use ThreadPoolExecutor for parallel image downloads
+            with ThreadPoolExecutor(max_workers=options['threads']) as executor:
+                futures = [executor.submit(create_product_with_image, i) for i in range(count)]
+                
+                completed = 0
+                for future in as_completed(futures):
+                    completed += 1
+                    success, error = future.result()
+                    if error:
+                        self.stdout.write(f'\r  - Progress: {completed}/{count} (Warning: {error})', ending='')
+                    else:
+                        self.stdout.write(f'\r  - Progress: {completed}/{count}', ending='')
+            
+            self.stdout.write(self.style.SUCCESS(f'\n\nSuccessfully created {count} fake products.'))
+
+
+
+"""
+
+
+
+python manage.py populate_products --count=250 --threads=20
+python manage.py populate_products --count=250 --bulk --clear #with no image and clearing the data base#
+
+python manage.py populate_products --count=250 --threads=15
+
+"""
