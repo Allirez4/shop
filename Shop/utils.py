@@ -1,5 +1,5 @@
 from kavenegar import *
-
+from decimal import Decimal
 
 def sendOTP(phone_number,code):
     try:
@@ -15,3 +15,9 @@ def sendOTP(phone_number,code):
         print(e)
     except HTTPException as e: 
         print(e)
+def sum_cart(cart):
+    total = sum(
+                Decimal(item['unit_price']) * int(item['quantity']) 
+             for item in cart.values()
+             )
+    return total

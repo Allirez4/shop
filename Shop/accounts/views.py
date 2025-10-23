@@ -56,11 +56,14 @@ class OTPVerify(View):
             otp_inestance=otp.objects.get(phone_number=user_session['phone_number'])
             if cd['code']==otp_inestance.code:
                 messages.success(request,'registeration was successful')
-                CustomUser.objects.Create_User(user_session['phone_number'],user_session['email'],user_session['full_name'],user_session['password'])
+                user=CustomUser.objects.Create_User(user_session['phone_number'],user_session['email'],user_session['full_name'],user_session['password'])
                 otp_inestance.delete()
+                #user=CustomUser.objects.get(phone_number=user_session['phone_number'])
+                login(request,user=user,backend='accounts.backends.EmailPhoneAuthBackend')##########
                 return redirect('/')
             else:
                 messages.error(request,'your code is wrong')
+                
                 return redirect('accounts:verify')
 class LoginView(View):
     form=forms.LoginForm

@@ -1,0 +1,580 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cart_filters %}
+
+{% block title %}Checkout - Shop{% endblock %}
+
+{% block content %}
+<div class="checkout-hero">
+    <div class="container">
+        <h1>Checkout</h1>
+        <p>Complete your order</p>
+    </div>
+</div>
+
+<section class="checkout-content">
+    <div class="container">
+        <form method="POST" action="{% url 'order:checkout' %}">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Order Items Section -->
+                <div class="col-lg-8 col-md-12 mb-4">
+                    <!-- Customer Information -->
+                    <div class="checkout-card">
+                        <div class="card-header">
+                            <h3>📋 Delivery Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-display">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-box">
+                                            <label>Full Name</label>
+                                            <p>{{ user.full_name }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-box">
+                                            <label>Phone Number</label>
+                                            <p>{{ user.phone_number }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-box">
+                                            <label>City</label>
+                                            <p>{{ user.city }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-box">
+                                            <label>National Code</label>
+                                            <p>{{ user.national_code }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <div class="info-box">
+                                            <label>Delivery Address</label>
+                                            <p>{{ user.address }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="{% url 'home:profile' %}" class="btn btn-outline-primary btn-sm">
+                                    ✏️ Edit Information
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="checkout-card mt-4">
+                        <div class="card-header">
+                            <h3>🛒 Order Items</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="order-items">
+                                {% for product_id, item in itemss.items %}
+                                <div class="order-item">
+                                    <div class="item-image">
+                                        {% if item.image %}
+                                            <img src="{{ item.image }}" alt="{{ item.name }}">
+                                        {% else %}
+                                            <div class="no-image">📦</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="item-details">
+                                        <h4>{{ item.name }}</h4>
+                                        <p class="item-price">${{ item.unit_price|floatformat:2 }} × {{ item.quantity }}</p>
+                                    </div>
+                                    <div class="item-total">
+                                        <span class="total-label">Total</span>
+                                        <span class="total-price">${{ item.unit_price|multiply:item.quantity|floatformat:2 }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="checkout-card mt-4">
+                        <div class="card-header">
+                            <h3>📝 Additional Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Hidden fields for required form data -->
+                            <input type="hidden" name="address" value="{{ user.address }}">
+                            <input type="hidden" name="city" value="{{ user.city }}">
+                            <input type="hidden" name="delivery_date" id="delivery_date" value="">
+                            
+                            <div class="form-group mb-3">
+                                <label for="delivery_date_picker">Preferred Delivery Date</label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    id="delivery_date_picker" 
+                                    min="{{ today }}"
+                                    required>
+                                <small class="text-muted">Select when you'd like to receive your order</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="extrainfo">Order Notes (Optional)</label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="extrainfo" 
+                                    name="extrainfo" 
+                                    rows="4" 
+                                    placeholder="Any special instructions for your order..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary Sidebar -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="checkout-card sticky-summary">
+                        <div class="card-header">
+                            <h3>💰 Order Summary</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">${{ total|default:"0.00"|floatformat:2 }}</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Delivery Fee:</span>
+                                <span id="delivery-fee">$5.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Tax (10%):</span>
+                                <span id="tax">$0.00</span>
+                            </div>
+                            <hr class="my-3">
+                            <div class="summary-row total-row">
+                                <strong>Total:</strong>
+                                <strong id="grand-total">$0.00</strong>
+                            </div>
+
+                            <div class="payment-methods mt-4">
+                                <h4>Payment Method</h4>
+                                <div class="payment-option">
+                                    <input type="radio" id="cash" name="payment_method" value="cash" disabled>
+                                    <label for="cash" class="disabled">
+                                        <span class="icon">💵</span>
+                                        <span>Cash on Delivery</span>
+                                        <span class="badge">Coming Soon</span>
+                                    </label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="card" name="payment_method" value="card" checked>
+                                    <label for="card">
+                                        <span class="icon">💳</span>
+                                        <span>Credit/Debit Card</span>
+                                        <span class="badge active">Available</span>
+                                    </label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="wallet" name="payment_method" value="wallet" disabled>
+                                    <label for="wallet" class="disabled">
+                                        <span class="icon">📱</span>
+                                        <span>Digital Wallet</span>
+                                        <span class="badge">Coming Soon</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="terms mt-4">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="terms" required>
+                                    <span>I agree to the <a href="#">Terms & Conditions</a></span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 mt-3 btn-lg">
+                                🎉 Place Order
+                            </button>
+                            <a href="{% url 'order:cart' %}" class="btn btn-outline-secondary w-100 mt-2">
+                                ← Back to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+    .checkout-hero {
+        text-align: center;
+        padding: 3rem 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin-bottom: 2rem;
+    }
+    
+    .checkout-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .checkout-hero p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .checkout-content {
+        padding: 2rem 1rem;
+        min-height: 60vh;
+    }
+    
+    .checkout-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .checkout-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-bottom: 1px solid #dee2e6;
+        padding: 1.5rem;
+    }
+    
+    .card-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+    
+    .card-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .info-box {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+    }
+    
+    .info-box label {
+        font-weight: 600;
+        color: #667eea;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.3rem;
+        display: block;
+    }
+    
+    .info-box p {
+        margin: 0;
+        color: #333;
+        font-size: 1rem;
+    }
+    
+    .order-items {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .order-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+    
+    .order-item:hover {
+        background: #e9ecef;
+    }
+    
+    .item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dee2e6;
+        font-size: 2rem;
+    }
+    
+    .item-details {
+        flex-grow: 1;
+    }
+    
+    .item-details h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .item-price {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .item-total {
+        text-align: right;
+    }
+    
+    .total-label {
+        display: block;
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 0.2rem;
+    }
+    
+    .total-price {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #28a745;
+    }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+    
+    .total-row {
+        font-size: 1.2rem;
+        padding: 1rem 0;
+        color: #667eea;
+    }
+    
+    .payment-methods h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+    
+    .payment-option {
+        margin-bottom: 0.75rem;
+    }
+    
+    .payment-option input[type="radio"] {
+        display: none;
+    }
+    
+    .payment-option label {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .payment-option input[type="radio"]:checked + label {
+        border-color: #667eea;
+        background: #f0f3ff;
+    }
+    
+    .payment-option input[type="radio"]:disabled + label {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f8f9fa;
+    }
+    
+    .payment-option label.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .payment-option label .icon {
+        font-size: 1.5rem;
+        margin-right: 0.75rem;
+    }
+    
+    .payment-option label .badge {
+        margin-left: auto;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        border-radius: 12px;
+        background: #6c757d;
+        color: white;
+        font-weight: 500;
+    }
+    
+    .payment-option label .badge.active {
+        background: #28a745;
+    }
+    
+    .terms {
+        padding: 1rem;
+        background: #fff3cd;
+        border-radius: 8px;
+        border-left: 4px solid #ffc107;
+    }
+    
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        cursor: pointer;
+    }
+    
+    .checkbox-label input {
+        margin-right: 0.5rem;
+    }
+    
+    .checkbox-label a {
+        color: #667eea;
+        text-decoration: none;
+    }
+    
+    .checkbox-label a:hover {
+        text-decoration: underline;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .sticky-summary {
+        position: sticky;
+        top: 20px;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        font-weight: 600;
+        padding: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .checkout-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .order-item {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .item-total {
+            text-align: center;
+        }
+        
+        .sticky-summary {
+            position: relative;
+            top: 0;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Calculate totals
+    const subtotalElement = document.getElementById('subtotal');
+    const deliveryFeeElement = document.getElementById('delivery-fee');
+    const taxElement = document.getElementById('tax');
+    const grandTotalElement = document.getElementById('grand-total');
+    
+    const subtotalText = subtotalElement.textContent.replace('$', '').trim();
+    const subtotal = parseFloat(subtotalText) || 0;
+    const deliveryFee = 5.00;
+    const tax = subtotal * 0.10;
+    const grandTotal = subtotal + deliveryFee + tax;
+    
+    taxElement.textContent = '$' + tax.toFixed(2);
+    grandTotalElement.textContent = '$' + grandTotal.toFixed(2);
+    
+    // Set delivery date to hidden field when user selects a date
+    const deliveryDatePicker = document.getElementById('delivery_date_picker');
+    const deliveryDateHidden = document.getElementById('delivery_date');
+    
+    // Set default date to 3 days from now
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 3);
+    
+    // Format date as YYYY-MM-DD for input
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    
+    // Set minimum date to today
+    deliveryDatePicker.setAttribute('min', formatDate(today));
+    
+    // Set default value to 3 days from now
+    deliveryDatePicker.value = formatDate(minDate);
+    
+    // Set hidden field to datetime format: YYYY-MM-DD HH:MM:SS
+    const formatDateTime = (dateStr) => {
+        return `${dateStr} 12:00:00`;
+    };
+    
+    deliveryDateHidden.value = formatDateTime(deliveryDatePicker.value);
+    
+    // Update hidden field when user changes date
+    deliveryDatePicker.addEventListener('change', function() {
+        deliveryDateHidden.value = formatDateTime(this.value);
+    });
+});
+</script>
+{% endblock %}

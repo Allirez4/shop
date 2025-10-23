@@ -28,6 +28,6 @@ class CustomUser(AbstractUser):
 class otp(models.Model):
     phone_number=models.CharField(max_length=11)
     created_at=models.DateTimeField(auto_now=True)
-    code=models.SmallIntegerField()    
+    code=models.IntegerField()    
     def __str__(self):
         return f'{self.phone_number} - {self.code} created at {self.created_at}'

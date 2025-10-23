@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment Error - Shop{% endblock %}
+
+{% block content %}
+<div class="error-hero">
+    <div class="container">
+        <h1>Payment Error</h1>
+        <p>Something went wrong with your payment</p>
+    </div>
+</div>
+
+<section class="error-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-9">
+                <div class="error-card">
+                    <div class="error-icon">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="#dc3545" stroke-width="2"/>
+                            <path d="M15 9L9 15M9 9L15 15" stroke="#dc3545" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="error-body">
+                        <h2>Payment Failed</h2>
+                        <p class="lead">We couldn't process your payment. This might happen for several reasons:</p>
+                        
+                        <div class="error-reasons">
+                            <ul>
+                                <li>Payment was cancelled by you</li>
+                                <li>Insufficient funds in your account</li>
+                                <li>Connection timeout with payment gateway</li>
+                                <li>Invalid payment information</li>
+                                <li>Transaction declined by your bank</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="error-actions">
+                            <a href="{% url 'order:checkout' %}" class="btn btn-primary btn-lg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Try Again
+                            </a>
+                            <a href="{% url 'order:cart' %}" class="btn btn-outline-secondary btn-lg">
+                                View Cart
+                            </a>
+                            <a href="{% url 'home:home' %}" class="btn btn-outline-secondary btn-lg">
+                                Continue Shopping
+                            </a>
+                        </div>
+                        
+                        <div class="error-help">
+                            <p class="text-muted">
+                                <strong>Need help?</strong> If you continue to experience issues, 
+                                please <a href="#">contact our support team</a> or try a different payment method.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="error-tips">
+                    <h4>Tips to complete your order:</h4>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="tip-card">
+                                <div class="tip-icon">💳</div>
+                                <h5>Check Your Card</h5>
+                                <p>Ensure your card has sufficient balance and is activated for online payments</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="tip-card">
+                                <div class="tip-icon">🌐</div>
+                                <h5>Stable Connection</h5>
+                                <p>Make sure you have a stable internet connection during payment</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="tip-card">
+                                <div class="tip-icon">🔒</div>
+                                <h5>Secure Payment</h5>
+                                <p>Double-check payment details and security codes before confirming</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .error-hero {
+        text-align: center;
+        padding: 3rem 1rem;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        margin-bottom: 3rem;
+    }
+    
+    .error-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .error-hero p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .error-content {
+        padding: 3rem 1rem;
+        min-height: 50vh;
+    }
+    
+    .error-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        padding: 3rem 2.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .error-icon {
+        margin-bottom: 1.5rem;
+    }
+    
+    .error-body h2 {
+        color: #dc3545;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .error-body .lead {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .error-reasons {
+        text-align: left;
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #dc3545;
+    }
+    
+    .error-reasons ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+    
+    .error-reasons li {
+        color: #555;
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+    
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 2.5rem 0;
+    }
+    
+    .error-actions .btn {
+        min-width: 150px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .error-help {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .error-help a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .error-help a:hover {
+        text-decoration: underline;
+    }
+    
+    .error-tips {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .error-tips h4 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .tip-card {
+        text-align: center;
+        padding: 1.5rem 1rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+    
+    .tip-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .tip-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .tip-card h5 {
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .tip-card p {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    @media (max-width: 768px) {
+        .error-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .error-card {
+            padding: 2rem 1.5rem;
+        }
+        
+        .error-actions {
+            flex-direction: column;
+        }
+        
+        .error-actions .btn {
+            width: 100%;
+        }
+        
+        .tip-card {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}

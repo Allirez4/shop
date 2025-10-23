@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from .models import Category, SubCategory
 from django.core.paginator import Paginator
+from .forms import profileUpdate as update_form
 def get_subcategories(request):
     """
     This view is called by the JavaScript.
@@ -33,27 +34,22 @@ class ProductDetailView(View):
 
 class profileView(View):
     def get(self,request):
+        form=update_form(instance=request.user)
         user=request.user
-        return render(request,'home/profile.html',{'user':user})
+        return render(request,'home/profile.html',{'user':user,'form':form})
     def post(self,request):
-        user = request.user
-        
-        # Update user fields
-        user.full_name = request.POST.get('full_name', user.full_name)
-        user.email = request.POST.get('email', user.email)
-        user.phone_number = request.POST.get('phone_number', user.phone_number)
-        user.city = request.POST.get('city', user.city)
-        user.address = request.POST.get('address', user.address)
-        user.postal_code = request.POST.get('postal_code', user.postal_code)
-        user.national_code = request.POST.get('national_code', user.national_code)
-        
-        try:
-            user.save()
+       
+        form=update_form(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
             messages.success(request, 'Profile updated successfully!')
-        except Exception as e:
-            messages.error(request, f'Error updating profile: {str(e)}')
+            return redirect('home:profile')
+                
+        else:
+             
+            messages.error(request, f'Error updating profile: {str(form.errors)}')
+            return render(request,'home/profile.html',{'form':form})
         
-        return redirect('home:profile')
 def List_products(request,category_slug,subcategory_slug=None):
     products = Product.objects.select_related('subcategory__category')
     if subcategory_slug:
@@ -66,14 +62,6 @@ def List_products(request,category_slug,subcategory_slug=None):
     page_obj = paginator.get_page(page_number)
     a=True
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        
-        
-        print(a)
-        print('='*99)
-        print(page_obj.has_next())
-        print(page_obj.object_list)
-        print(paginator.count)
-        print(paginator.num_pages)
         
         return render(request,'home/products_partial.html',{'products':page_obj.object_list,'has_nextpage':page_obj.has_next()})
     print('aaavvvvvaaaa')    

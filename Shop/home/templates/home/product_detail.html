@@ -35,7 +35,10 @@
             
             <div class="mt-4">
                 {% if product.availability and product.count > 0 %}
-                    <button class="btn btn-primary btn-lg">Add to Cart</button>
+                    <form method="POST" action="{% url 'order:add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+                    </form>
                 {% else %}
                     <button class="btn btn-secondary btn-lg" disabled>Out of Stock</button>
                 {% endif %}

@@ -22,6 +22,16 @@
             <a href="{% url 'accounts:register' %}" style="text-decoration: none; color: #007bff; padding: 0.5rem 1rem; border: 1px solid #007bff; border-radius: 4px; transition: all 0.3s;">Register</a>
             <a href="{% url 'accounts:login' %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Login</a>
         {% else %}
+            <!-- Shopping Cart Icon -->
+            <a href="{% url 'order:cart' %}" style="position: relative; text-decoration: none; color: #333; padding: 0.5rem 1rem; transition: color 0.3s;">
+                <span style="font-size: 1.5rem;">🛒</span>
+                {% if request.session.cart %}
+                    <span style="position: absolute; top: 0; right: 0; background-color: #dc3545; color: white; border-radius: 50%; padding: 0.1rem 0.4rem; font-size: 0.75rem; font-weight: bold;">
+                        {{ request.session.cart|length }}
+                    </span>
+                {% endif %}
+            </a>
+            
             {% if not user.is_admin %}
                 <a href="{% url 'home:profile' %}" style="text-decoration: none; color: #28a745; padding: 0.5rem 1rem; border: 1px solid #28a745; border-radius: 4px; transition: all 0.3s; margin-right: 0.5rem;">
                     <i style="margin-right: 0.3rem;">👤</i>Profile

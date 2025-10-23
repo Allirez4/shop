@@ -67,6 +67,12 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="info-item">
+                                        <label>National Code</label>
+                                        <p>{{ user.national_code|default:"Not provided" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="info-item">
                                         <label>Member Since</label>
                                         <p>{{ user.date_joined|date:"F d, Y" }}</p>
                                     </div>
@@ -88,48 +94,55 @@
                                     <div class="form-group">
                                         <label for="full_name" class="form-label">Full Name</label>
                                         <input type="text" class="form-control" id="full_name" name="full_name" 
-                                               value="{{ user.full_name }}" required>
+                                               value="{{ user.full_name|default:'' }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" id="username" name="username" 
-                                               value="{{ user.username }}">
+                                               value="{{ user.username|default:'' }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
                                         <label for="email" class="form-label">Email Address</label>
                                         <input type="email" class="form-control" id="email" name="email" 
-                                               value="{{ user.email }}" required>
+                                               value="{{ user.email|default:'' }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
                                         <label for="phone_number" class="form-label">Phone Number</label>
                                         <input type="text" class="form-control" id="phone_number" name="phone_number" 
-                                               value="{{ user.phone_number }}" required>
+                                               value="{{ user.phone_number|default:'' }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
                                         <label for="city" class="form-label">City</label>
                                         <input type="text" class="form-control" id="city" name="city" 
-                                               value="{{ user.city }}">
+                                               value="{{ user.city|default:'' }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="form-group">
                                         <label for="postal_code" class="form-label">Postal Code</label>
                                         <input type="text" class="form-control" id="postal_code" name="postal_code" 
-                                               value="{{ user.postal_code }}">
+                                               value="{{ user.postal_code|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="national_code" class="form-label">National Code</label>
+                                        <input type="text" class="form-control" id="national_code" name="national_code" 
+                                               value="{{ user.national_code|default:'' }}" maxlength="10">
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group">
                                         <label for="address" class="form-label">Address</label>
-                                        <textarea class="form-control" id="address" name="address" rows="3">{{ user.address }}</textarea>
+                                        <textarea class="form-control" id="address" name="address" rows="3">{{ user.address|default:'' }}</textarea>
                                     </div>
                                 </div>
                             </div>

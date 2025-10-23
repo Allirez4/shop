@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'smart_selects',
     'debug_toolbar',
+    'order.apps.OrderConfig',
 ]
 JQUERY_URL = True
 MIDDLEWARE = [
