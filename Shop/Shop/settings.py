@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'daphne',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -43,7 +44,25 @@ INSTALLED_APPS = [
     'smart_selects',
     'debug_toolbar',
     'order.apps.OrderConfig',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_spectacular',
+    
+    'chat.apps.ChatConfig',
+    'channels',
 ]
+REST_FRAMEWORK={
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Token expires in 60 min
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token lasts 7 days
+    'REFRESH_TOKEN_ROTATE':True
+}
 JQUERY_URL = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,7 +96,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Shop.wsgi.application'
-
+ASGI_APPLICATION = "Shop.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -160,3 +179,15 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Tehran'
+
+def show_toolbar(request):
+    """Custom function to control when debug toolbar appears"""
+    # Don't show for chat/websocket URLs
+    if request.path.startswith('/chat/') or request.path.startswith('/ws/'):
+        return False
+    # Show for everything else when DEBUG=True
+    return DEBUG
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'Shop.settings.show_toolbar',
+}

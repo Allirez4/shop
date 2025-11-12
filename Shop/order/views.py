@@ -3,6 +3,7 @@ from django.views import View
 from django.contrib import messages
 from home.models import Product
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import CustomUser
 from .models import Order,OrderItems
 from .forms import OrderForm
@@ -76,7 +77,7 @@ def RemoveFromCartView(request,product_id):
         request.session['cart']=cart
         request.session.modified=True
         return redirect('order:cart')    
-class CheckoutView(View):
+class CheckoutView(View,LoginRequiredMixin):
     
     def get(self,request):
         
@@ -165,7 +166,7 @@ class CheckoutView(View):
             else:
                 return render(request,'order/checkout.html',{'user':user,'itemss':cart,'total':total,'form':form},)
 def verify(request):
-   
+
     if request.method=='GET':
         authority=request.GET.get('Authority')
         status=request.GET.get('Status')

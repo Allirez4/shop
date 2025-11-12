@@ -1,13 +1,13 @@
-<nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
-    <div style="display: flex; align-items: center; gap: 2rem;">
-        <a href="/" style="text-decoration: none; font-weight: bold; color: #007bff;">Home</a>
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; flex-wrap: wrap; gap: 1rem;">
+    <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+        <a href="/" style="text-decoration: none; font-weight: bold; color: #007bff; font-size: 1.2rem;">🏪 Shop</a>
         
         <!-- Category Menu -->
-        <div style="display: flex; gap: 1.5rem;">
+        <div class="category-menu" style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
             {% for category in all_categories %}
             <div class="dropdown" style="position: relative;">
                 <a href="{% url 'home:name_of_your_product_list_view' category.slug %}" style="text-decoration: none; color: #333; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">{{ category.name }}</a>
-                <div style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
+                <div class="dropdown-menu" style="display: none; position: absolute; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 4px; padding: 0.5rem; min-width: 150px; top: 100%; left: 0; z-index: 1000;">
                     {% for subcategory in category.subcategory.all %}
                     <a href="{% url 'home:list_products' category.slug subcategory.slug %}" style="display: block; padding: 0.5rem; text-decoration: none; color: #333;">{{ subcategory.name }}</a>
                     {% endfor %}
@@ -17,7 +17,29 @@
         </div>
     </div>
     
-    <div style="display: flex; align-items: center; gap: 1rem;">
+    <!-- Search Bar -->
+    <div class="search-container" style="flex: 1; max-width: 500px; min-width: 200px;">
+        <form action="{% url 'home:search' %}" method="GET" style="position: relative;">
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Search products..." 
+                style="width: 100%; padding: 0.6rem 2.5rem 0.6rem 1rem; border: 2px solid #dee2e6; border-radius: 25px; font-size: 0.95rem; transition: all 0.3s; outline: none;"
+                onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.1)';"
+                onblur="this.style.borderColor='#dee2e6'; this.style.boxShadow='none';"
+            >
+            <button 
+                type="submit" 
+                style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #007bff; border: none; padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; transition: background 0.3s;"
+                onmouseover="this.style.background='#0056b3';"
+                onmouseout="this.style.background='#007bff';"
+            >
+                <span style="color: white; font-size: 1rem;">🔍</span>
+            </button>
+        </form>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
         {% if not user.is_authenticated %}
             <a href="{% url 'accounts:register' %}" style="text-decoration: none; color: #007bff; padding: 0.5rem 1rem; border: 1px solid #007bff; border-radius: 4px; transition: all 0.3s;">Register</a>
             <a href="{% url 'accounts:login' %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Login</a>
@@ -34,14 +56,54 @@
             
             {% if not user.is_admin %}
                 <a href="{% url 'home:profile' %}" style="text-decoration: none; color: #28a745; padding: 0.5rem 1rem; border: 1px solid #28a745; border-radius: 4px; transition: all 0.3s; margin-right: 0.5rem;">
-                    <i style="margin-right: 0.3rem;">👤</i>Profile
+                    <i style="margin-right: 0.3rem;">👤</i><span class="profile-text">Profile</span>
                 </a>
             {% endif %}
-            <span style="color: #333; margin-right: 1rem;">Welcome, {{ user.full_name|default:user.email }}!</span>
+            <span class="welcome-text" style="color: #333; margin-right: 1rem;">Welcome, {{ user.full_name|default:user.email }}!</span>
             <a href="{% url 'accounts:logout' %}" style="text-decoration: none; color: #dc3545; padding: 0.5rem 1rem; border: 1px solid #dc3545; border-radius: 4px; transition: all 0.3s;">Logout</a>
         {% endif %}
     </div>
 </nav>
+
+<style>
+    /* Mobile Responsive Styles */
+    @media (max-width: 992px) {
+        .category-menu {
+            display: none !important;
+        }
+        
+        .welcome-text {
+            display: none !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        nav {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+        
+        .search-container {
+            order: 3;
+            max-width: 100% !important;
+            width: 100%;
+        }
+        
+        .profile-text {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        nav > div:first-child {
+            justify-content: center;
+        }
+        
+        nav > div:last-child {
+            justify-content: center;
+        }
+    }
+</style>
 
 <script>
 // Simple dropdown functionality
@@ -50,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     dropdowns.forEach(dropdown => {
         const link = dropdown.querySelector('a');
-        const menu = dropdown.querySelector('div[style*="display: none"]');
+        const menu = dropdown.querySelector('.dropdown-menu');
         
         dropdown.addEventListener('mouseenter', () => {
             menu.style.display = 'block';

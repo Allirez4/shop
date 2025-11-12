@@ -223,6 +223,108 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Orders Section -->
+        <div class="row mt-4" id="orders-section">
+            <div class="col-12">
+                <div class="profile-card">
+                    <div class="card-header">
+                        <h3>📦 My Orders</h3>
+                        <span class="badge badge-info">{{ orders.count }} Order{{ orders.count|pluralize }}</span>
+                    </div>
+                    <div class="card-body">
+                        {% if orders %}
+                            <div class="orders-list">
+                                {% for order in orders %}
+                                <div class="order-card">
+                                    <div class="order-header">
+                                        <div class="order-info">
+                                            <h4>Order #{{ order.id }}</h4>
+                                            <p class="order-date">{{ order.created_at|date:"F d, Y - H:i" }}</p>
+                                        </div>
+                                        <div class="order-status">
+                                            {% if order.is_paid %}
+                                                <span class="badge badge-success">✓ Paid</span>
+                                            {% else %}
+                                                <span class="badge badge-warning">⏳ Pending</span>
+                                            {% endif %}
+                                            
+                                            {% if order.is_deliverd %}
+                                                <span class="badge badge-info">📬 Delivered</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">🚚 In Transit</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="order-details">
+                                        <div class="detail-row">
+                                            <span class="label">Delivery Address:</span>
+                                            <span class="value">{{ order.address }}, {{ order.city }}</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="label">Expected Delivery:</span>
+                                            <span class="value">{{ order.delivery_date|date:"F d, Y" }}</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="label">Delivery Fee:</span>
+                                            <span class="value">${{ order.delivery_fee|floatformat:2 }}</span>
+                                        </div>
+                                        {% if order.extrainfo %}
+                                        <div class="detail-row">
+                                            <span class="label">Notes:</span>
+                                            <span class="value">{{ order.extrainfo }}</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="order-items">
+                                        <h5>Order Items:</h5>
+                                        <div class="items-grid">
+                                            {% for item in order.items.all %}
+                                            <div class="order-item">
+                                                <div class="item-image">
+                                                    {% if item.item.image %}
+                                                        <img src="{{ item.item.image.url }}" alt="{{ item.item.name }}">
+                                                    {% else %}
+                                                        <div class="no-image">📦</div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="item-info">
+                                                    <h6>{{ item.item.name }}</h6>
+                                                    <p class="item-quantity">Qty: {{ item.quantity }} × ${{ item.price_at|floatformat:2 }}</p>
+                                                    <p class="item-total">${{ item.price_at|floatformat:2 }}</p>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="order-footer">
+                                        <div class="order-total">
+                                            <span class="total-label">Order Total:</span>
+                                            <span class="total-amount">
+                                                ${{ order.get_order_total|floatformat:2 }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="empty-orders">
+                                <div class="empty-icon">📦</div>
+                                <h4>No Orders Yet</h4>
+                                <p>You haven't placed any orders. Start shopping to see your orders here!</p>
+                                <a href="{% url 'home:home' %}" class="btn btn-primary mt-3">
+                                    🛍️ Start Shopping
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}
@@ -531,6 +633,266 @@
         .status-item {
             flex-direction: column;
             align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+    
+    /* Orders Section Styles */
+    .badge-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .order-card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        transition: all 0.3s;
+    }
+    
+    .order-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+    }
+    
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .order-info h4 {
+        margin: 0;
+        color: #333;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+    
+    .order-date {
+        margin: 0.3rem 0 0 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .order-status {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    
+    .badge-warning {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .badge-secondary {
+        background-color: #e2e3e5;
+        color: #383d41;
+    }
+    
+    .order-details {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-row .label {
+        font-weight: 600;
+        color: #667eea;
+        font-size: 0.9rem;
+    }
+    
+    .detail-row .value {
+        color: #333;
+        text-align: right;
+        max-width: 60%;
+    }
+    
+    .order-items {
+        margin: 1rem 0;
+    }
+    
+    .order-items h5 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+    
+    .items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+    
+    .order-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.2s;
+    }
+    
+    .order-item:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    .item-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dee2e6;
+        font-size: 1.5rem;
+    }
+    
+    .item-info {
+        flex-grow: 1;
+    }
+    
+    .item-info h6 {
+        margin: 0 0 0.3rem 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .item-quantity {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #666;
+    }
+    
+    .item-total {
+        margin: 0.3rem 0 0 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #28a745;
+    }
+    
+    .order-footer {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid #dee2e6;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .order-total {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .total-label {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    
+    .total-amount {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+    
+    .empty-orders {
+        text-align: center;
+        padding: 3rem 1rem;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .empty-orders h4 {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .empty-orders p {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .order-header {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .order-status {
+            justify-content: flex-start;
+        }
+        
+        .detail-row {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
+        .detail-row .value {
+            text-align: left;
+            max-width: 100%;
+        }
+        
+        .items-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .order-total {
+            flex-direction: column;
+            text-align: center;
             gap: 0.5rem;
         }
     }

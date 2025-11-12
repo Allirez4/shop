@@ -63,6 +63,14 @@
             </div>
             {% endfor %}
         </div>
+        
+        <!-- Loading indicator -->
+        <div id="loading" class="text-center mt-4" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        
         {% else %}
         <div class="row">
             <div class="col-12">
@@ -197,4 +205,57 @@
         }
     }
 </style>
+<script>
+    let currentPage = 1;
+    let isLoading = false;
+    let hasMorePages = {{ page_obj.has_next|yesno:"true,false" }};
+
+    function loadMoreProducts() {
+        if (isLoading || !hasMorePages) return;
+        
+        isLoading = true;
+        document.getElementById('loading').style.display = 'block';
+        
+        currentPage++;
+        
+        fetch(`?page=${currentPage}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newProducts = doc.querySelectorAll('.col-xl-3');
+            const productsContainer = document.getElementById('products');
+            
+            newProducts.forEach(product => {
+                productsContainer.appendChild(product);
+            });
+            
+            // Check if there are more pages
+            const hasNextAttr = doc.querySelector('[data-has-next]');
+            hasMorePages = hasNextAttr ? hasNextAttr.dataset.hasNext === 'true' : false;
+            
+            isLoading = false;
+            document.getElementById('loading').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error loading products:', error);
+            isLoading = false;
+            document.getElementById('loading').style.display = 'none';
+        });
+    }
+
+    // Infinite scroll trigger
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const threshold = document.documentElement.scrollHeight - 500;
+        
+        if (scrollPosition >= threshold) {
+            loadMoreProducts();
+        }
+    });
+</script>
 {% endblock %}
