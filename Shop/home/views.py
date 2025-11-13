@@ -62,7 +62,7 @@ class HomeView(View):
         page_number=request.GET.get('page',1)
         page_obj=paginator.get_page(page_number)
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return render(request,'home/partial_home.html',{'products':page_obj.object_list,'has_nextpage':page_obj.has_next()})
+            return render(request,'home/partial_home.html',{'products':page_obj.object_list,'has_nextpage':page_obj.has_next(),'user_id':request.user.id if request.user.is_authenticated else ''})
         
         return render(request,'home/home.html',{'products':page_obj.object_list,'page_obj':page_obj})
 class ProductDetailView(View):

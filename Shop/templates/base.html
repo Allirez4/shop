@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/support-chat.css' %}">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -21,7 +22,31 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+
+    {% if user.is_authenticated and request.resolver_match.url_name not in 'login,register' %}
+        <div id="user-id" data-user-id="{{ user.id }}" style="display:none;"></div>
+        
+        <!-- Floating Support Button -->
+        <button id="support-btn" class="floating-support-btn">💬</button>
+
+        <!-- Chat Modal -->
+        <div id="support-chat" class="chat-modal">
+            <div class="chat-header">
+                <h5>Support Chat</h5>
+                <button id="close-chat" class="btn-close"></button>
+            </div>
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" class="form-control" placeholder="Type a message...">
+                <button id="send-btn" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    {% endif %}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% if user.is_authenticated %}
+        <script src="{% static 'js/support-chat.js' %}"></script>
+    {% endif %}
     {% block scripts %}{% endblock %}
 </body>
 </html>
