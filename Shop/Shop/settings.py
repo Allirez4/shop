@@ -26,7 +26,7 @@ load_dotenv(BASE_DIR.parent.parent / '.env')
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-*8nmh3knk%n3cs_6%v!(#6rb*^9f$ckxc+$k$95t8x4b$q_=e5')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-CHANGE-ME-IN-PRODUCTION')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
@@ -110,7 +110,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'shop'),
         'USER': os.getenv('DB_USER', 'shop'),
-        'PASSWORD': os.getenv('DB_PASSWORD', '123'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
@@ -170,9 +170,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'alireza52181@gmail.com')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'djhwdxyhocoqbyjt')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'YALLAH')
 #celery settings
