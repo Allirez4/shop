@@ -25,6 +25,7 @@ db.sqlite3-journal
 *.json.backup
 backup.json
 bbackup.json
+data.json
 data_fixed.json
 
 # IDE

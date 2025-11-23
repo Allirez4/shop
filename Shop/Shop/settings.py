@@ -53,8 +53,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
-    
-    'chat.apps.ChatConfig',
     'channels',
 ]
 REST_FRAMEWORK={
