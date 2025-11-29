@@ -23,7 +23,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    {% if user.is_authenticated and request.resolver_match.url_name not in 'login,register' %}
+    {% if user.is_authenticated and not user.is_staff and request.resolver_match.url_name not in 'login,register' %}
         <div id="user-id" data-user-id="{{ user.id }}" style="display:none;"></div>
         
         <!-- Floating Support Button -->
@@ -44,7 +44,7 @@
     {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and not user.is_staff %}
         <script src="{% static 'js/support-chat.js' %}"></script>
     {% endif %}
     {% block scripts %}{% endblock %}

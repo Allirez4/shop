@@ -5,7 +5,7 @@ if (userId) {
     // WebSocket connection
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const chatSocket = new WebSocket(
-        protocol + '//' + window.location.host + '/ws/chat/' + userId + '/'
+        protocol + '//' + window.location.host + '/ws/support/' + userId + '/'
     );
 
     // DOM elements

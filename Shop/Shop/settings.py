@@ -197,4 +197,7 @@ def show_toolbar(request):
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'Shop.settings.show_toolbar',
+    'DISABLE_PANELS': [
+        'debug_toolbar.panels.templates.TemplatesPanel',
+    ],
 }
